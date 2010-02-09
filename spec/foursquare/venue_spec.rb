@@ -60,7 +60,14 @@ describe Foursquare::Venue do
       end
       
       describe "when authenticated" do
-        it "should pull user specific data"
+        before do
+          FakeWeb.register_uri(:get ,"http://api.playfoursquare.com/v1/user.json", :body => fakeweb_read('user.json'))
+        end
+        
+        it "should pull user specific data" do
+          Foursquare::Base.connect('user@example.com', 'secret')
+          Foursquare::User.find.should_not be_nil
+        end
       end
       
       describe "with options" do
